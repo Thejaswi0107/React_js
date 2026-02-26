@@ -1,9 +1,10 @@
-import Parent from "./components/Parent";
+import React from "react";
+import Registrationform from "./component/Registrationform";
 
 function App() {
   return (
     <div>
-      <Parent />
+      <Registrationform />
     </div>
   );
 }
