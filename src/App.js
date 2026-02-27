@@ -1,10 +1,9 @@
-import React from "react";
-import Registrationform from "./component/Registrationform";
+import ThemeCard from "./component/ThemeCard";
 
 function App() {
   return (
     <div>
-      <Registrationform />
+      <ThemeCard />
     </div>
   );
 }
