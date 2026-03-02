@@ -1,11 +1,17 @@
-import ThemeCard from "./component/ThemeCard";
+import React from "react";
+import Stopwatch from "./component/Stopwatch";
+import UsersTable from "./component/UsersTable";
+import "./App.css";
 
-function App() {
+const App = () => {
   return (
-    <div>
-      <ThemeCard />
+    <div className="container">
+      <h1>React Assignment</h1>
+
+      <Stopwatch />
+      <UsersTable />
     </div>
   );
-}
+};
 
 export default App;
