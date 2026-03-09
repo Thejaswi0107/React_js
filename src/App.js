@@ -1,17 +1,38 @@
-import React from "react";
-import Stopwatch from "./component/Stopwatch";
-import UsersTable from "./component/UsersTable";
+import React, { useState, useCallback } from "react";
+import ButtonComponent from "./ButtonComponent";
 import "./App.css";
 
-const App = () => {
+function App() {
+  const [count, setCount] = useState(0);
+  const [otherState, setOtherState] = useState(false);
+
+  // useCallback memoizes the function
+  const increment = useCallback(() => {
+    setCount((prev) => prev + 1);
+  }, []);
+
+  const toggleState = () => {
+    setOtherState(!otherState);
+  };
+
   return (
     <div className="container">
-      <h1>React Assignment</h1>
+      
+      <div className="card">
+        <h2>Counter Value: {count}</h2>
 
-      <Stopwatch />
-      <UsersTable />
+        <ButtonComponent handleClick={increment} />
+
+        <button className="toggle-btn" onClick={toggleState}>
+          Toggle State
+        </button>
+
+        <p>
+          Other State: <b>{otherState ? "TRUE" : "FALSE"}</b>
+        </p>
+      </div>
     </div>
   );
-};
+}
 
 export default App;
