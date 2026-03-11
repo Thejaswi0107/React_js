@@ -1,37 +1,51 @@
-import React, { useState, useCallback } from "react";
-import ButtonComponent from "./ButtonComponent";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
+import Services from "./pages/Services";
+
+import WebDevelopment from "./services/WebDevelopment";
+import AppDevelopment from "./services/AppDevelopment";
+import UIUX from "./services/UIUX";
+
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [otherState, setOtherState] = useState(false);
-
-  // useCallback memoizes the function
-  const increment = useCallback(() => {
-    setCount((prev) => prev + 1);
-  }, []);
-
-  const toggleState = () => {
-    setOtherState(!otherState);
-  };
-
   return (
-    <div className="container">
-      
-      <div className="card">
-        <h2>Counter Value: {count}</h2>
+    <Router>
 
-        <ButtonComponent handleClick={increment} />
+      <nav className="navbar">
+        <h2>My Website</h2>
 
-        <button className="toggle-btn" onClick={toggleState}>
-          Toggle State
-        </button>
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/about">About</Link></li>
+          <li><Link to="/services">Services</Link></li>
+          <li><Link to="/contact">Contact</Link></li>
+          <li><Link to="/profile">Profile</Link></li>
+          <li><Link to="/settings">Settings</Link></li>
+        </ul>
+      </nav>
 
-        <p>
-          Other State: <b>{otherState ? "TRUE" : "FALSE"}</b>
-        </p>
-      </div>
-    </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+
+        <Route path="/services" element={<Services />}>
+          <Route path="web" element={<WebDevelopment />} />
+          <Route path="app" element={<AppDevelopment />} />
+          <Route path="uiux" element={<UIUX />} />
+        </Route>
+
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
+
+    </Router>
   );
 }
 
