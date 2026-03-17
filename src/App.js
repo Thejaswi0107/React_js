@@ -2,29 +2,23 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
-
   const [users, setUsers] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [editId, setEditId] = useState(null);
 
-  // READ (GET)
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then(res => res.json())
       .then(data => setUsers(data));
   }, []);
 
-  // CREATE (POST)
   const addUser = () => {
-
     if (name.trim() === "" || email.trim() === "") {
       alert("Please fill all fields");
       return;
     }
-
     const newUser = { name, email };
-
     fetch("https://jsonplaceholder.typicode.com/users", {
       method: "POST",
       headers: {
@@ -40,7 +34,6 @@ function App() {
       });
   };
 
-  // DELETE
   const deleteUser = (id) => {
     fetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
       method: "DELETE"
@@ -50,16 +43,13 @@ function App() {
     });
   };
 
-  // EDIT BUTTON CLICK
   const editUser = (user) => {
     setName(user.name);
     setEmail(user.email);
     setEditId(user.id);
   };
 
-  // UPDATE (PUT)
   const updateUser = () => {
-
     if (name.trim() === "" || email.trim() === "") {
       alert("Please fill all fields");
       return;
@@ -78,7 +68,6 @@ function App() {
         const updatedList = users.map(user =>
           user.id === editId ? data : user
         );
-
         setUsers(updatedList);
         setEditId(null);
         setName("");
@@ -88,9 +77,7 @@ function App() {
 
   return (
     <div className="container">
-
       <h1>CRUD User Management</h1>
-
       <div className="form">
         <input
           type="text"
@@ -98,7 +85,6 @@ function App() {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-
         <input
           type="email"
           placeholder="Enter Email"
@@ -112,7 +98,6 @@ function App() {
           <button onClick={addUser}>Add</button>
         )}
       </div>
-
       <table>
         <thead>
           <tr>
@@ -122,7 +107,6 @@ function App() {
             <th>Actions</th>
           </tr>
         </thead>
-
         <tbody>
           {users.map((user, index) => (
             <tr key={user.id}>
@@ -132,8 +116,7 @@ function App() {
               <td>
                 <button className="edit-btn" onClick={() => editUser(user)}>Edit</button>
                 <button
-                  className="delete-btn"
-                  onClick={() => deleteUser(user.id)}
+                  className="delete-btn" onClick={() => deleteUser(user.id)}
                 >
                   Delete
                 </button>
@@ -142,7 +125,6 @@ function App() {
           ))}
         </tbody>
       </table>
-
     </div>
   );
 }
