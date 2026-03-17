@@ -1,72 +1,139 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
 
-  const [task, setTask] = useState("");
-  const [taskList, setTaskList] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [editId, setEditId] = useState(null);
 
-  const inputRef = useRef();
+  // READ (GET)
+  useEffect(() => {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then(res => res.json())
+      .then(data => setUsers(data));
+  }, []);
 
-  const addTask = () => {
+  // CREATE (POST)
+  const addUser = () => {
 
-    if (task.trim() === "") {
-      alert("Please enter a task");
+    if (name.trim() === "" || email.trim() === "") {
+      alert("Please fill all fields");
       return;
     }
 
-    const newTask = {
-      id: Date.now(),
-      name: task
-    };
+    const newUser = { name, email };
 
-    setTaskList([...taskList, newTask]);
-    setTask("");
-
-    inputRef.current.focus();
+    fetch("https://jsonplaceholder.typicode.com/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newUser)
+    })
+      .then(res => res.json())
+      .then(data => {
+        setUsers([...users, data]);
+        setName("");
+        setEmail("");
+      });
   };
 
-  const deleteTask = (id) => {
-    const updatedList = taskList.filter((item) => item.id !== id);
-    setTaskList(updatedList);
+  // DELETE
+  const deleteUser = (id) => {
+    fetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
+      method: "DELETE"
+    }).then(() => {
+      const updated = users.filter(user => user.id !== id);
+      setUsers(updated);
+    });
+  };
+
+  // EDIT BUTTON CLICK
+  const editUser = (user) => {
+    setName(user.name);
+    setEmail(user.email);
+    setEditId(user.id);
+  };
+
+  // UPDATE (PUT)
+  const updateUser = () => {
+
+    if (name.trim() === "" || email.trim() === "") {
+      alert("Please fill all fields");
+      return;
+    }
+
+    fetch(`https://jsonplaceholder.typicode.com/users/${editId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name, email })
+    })
+      .then(res => res.json())
+      .then(data => {
+
+        const updatedList = users.map(user =>
+          user.id === editId ? data : user
+        );
+
+        setUsers(updatedList);
+        setEditId(null);
+        setName("");
+        setEmail("");
+      });
   };
 
   return (
     <div className="container">
 
-      <h1>Todo List</h1>
+      <h1>CRUD User Management</h1>
 
-      <div className="input-section">
+      <div className="form">
         <input
           type="text"
-          placeholder="Enter task"
-          value={task}
-          ref={inputRef}
-          onChange={(e) => setTask(e.target.value)}
+          placeholder="Enter Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
 
-        <button onClick={addTask}>Add</button>
+        <input
+          type="email"
+          placeholder="Enter Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        {editId ? (
+          <button onClick={updateUser}>Update</button>
+        ) : (
+          <button onClick={addUser}>Add</button>
+        )}
       </div>
 
       <table>
-
         <thead>
           <tr>
             <th>S.No</th>
-            <th>Task Name</th>
-            <th>Action</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
         <tbody>
-          {taskList.map((item, index) => (
-            <tr key={item.id}>
+          {users.map((user, index) => (
+            <tr key={user.id}>
               <td>{index + 1}</td>
-              <td>{item.name}</td>
+              <td>{user.name}</td>
+              <td>{user.email}</td>
               <td>
+                <button className="edit-btn" onClick={() => editUser(user)}>Edit</button>
                 <button
                   className="delete-btn"
-                  onClick={() => deleteTask(item.id)}
+                  onClick={() => deleteUser(user.id)}
                 >
                   Delete
                 </button>
@@ -74,7 +141,6 @@ function App() {
             </tr>
           ))}
         </tbody>
-
       </table>
 
     </div>
