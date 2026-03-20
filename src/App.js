@@ -1,131 +1,37 @@
-import React, { useState, useEffect } from "react";
-import "./App.css";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Navbar from "./components/Navbar";
+
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Services from "./pages/Services";
+import Projects from "./pages/Projects";
+import ProjectDetails from "./pages/ProjectDetails";
+import Contact from "./pages/Contact";
+import Auth from "./pages/Auth";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
-  const [users, setUsers] = useState([]);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [editId, setEditId] = useState(null);
-
-  useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then(res => res.json())
-      .then(data => setUsers(data));
-  }, []);
-
-  const addUser = () => {
-    if (name.trim() === "" || email.trim() === "") {
-      alert("Please fill all fields");
-      return;
-    }
-    const newUser = { name, email };
-    fetch("https://jsonplaceholder.typicode.com/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(newUser)
-    })
-      .then(res => res.json())
-      .then(data => {
-        setUsers([...users, data]);
-        setName("");
-        setEmail("");
-      });
-  };
-
-  const deleteUser = (id) => {
-    fetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
-      method: "DELETE"
-    }).then(() => {
-      const updated = users.filter(user => user.id !== id);
-      setUsers(updated);
-    });
-  };
-
-  const editUser = (user) => {
-    setName(user.name);
-    setEmail(user.email);
-    setEditId(user.id);
-  };
-
-  const updateUser = () => {
-    if (name.trim() === "" || email.trim() === "") {
-      alert("Please fill all fields");
-      return;
-    }
-
-    fetch(`https://jsonplaceholder.typicode.com/users/${editId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ name, email })
-    })
-      .then(res => res.json())
-      .then(data => {
-
-        const updatedList = users.map(user =>
-          user.id === editId ? data : user
-        );
-        setUsers(updatedList);
-        setEditId(null);
-        setName("");
-        setEmail("");
-      });
-  };
-
   return (
-    <div className="container">
-      <h1>CRUD User Management</h1>
-      <div className="form">
-        <input
-          type="text"
-          placeholder="Enter Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="email"
-          placeholder="Enter Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+    <Router>
 
-        {editId ? (
-          <button onClick={updateUser}>Update</button>
-        ) : (
-          <button onClick={addUser}>Add</button>
-        )}
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>S.No</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, index) => (
-            <tr key={user.id}>
-              <td>{index + 1}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>
-                <button className="edit-btn" onClick={() => editUser(user)}>Edit</button>
-                <button
-                  className="delete-btn" onClick={() => deleteUser(user.id)}
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+      <Navbar />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/projects/:id" element={<ProjectDetails />} />
+        <Route path="/auth" element={<Auth />} />
+  <Route path="/login" element={<Login />} />
+  <Route path="/register" element={<Register />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
+
+    </Router>
   );
 }
 

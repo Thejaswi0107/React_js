@@ -1,7 +1,9 @@
-import React from "react";
-
 function Home() {
-  return <h1>Welcome to Home Page</h1>;
+  return (
+    <div>
+      <h1>Hello, I'm Thejaswi 👋</h1>
+      <p>Frontend Developer</p>
+    </div>
+  );
 }
-
 export default Home;
