@@ -1,37 +1,18 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import Navbar from "./components/Navbar";
-
-import Home from "./pages/Home";
-import About from "./pages/About";
-import Services from "./pages/Services";
-import Projects from "./pages/Projects";
-import ProjectDetails from "./pages/ProjectDetails";
-import Contact from "./pages/Contact";
-import Auth from "./pages/Auth";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import UserProfileCard from "./components/UserProfileCard";
+import "./App.css";
 
 function App() {
+  const userData = {
+    profileImage:
+      "https://static01.nyt.com/images/2022/11/15/realestate/16garden01/oakImage-1668536396627-videoSixteenByNine3000.jpg",
+    name: "Thejaswi",
+    role: "Associate Software Engineer",
+    bio: "I’m an Associate Software Engineer who’s always learning and adapting",
+  };
   return (
-    <Router>
-
-      <Navbar />
-
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:id" element={<ProjectDetails />} />
-        <Route path="/auth" element={<Auth />} />
-  <Route path="/login" element={<Login />} />
-  <Route path="/register" element={<Register />} />
-        <Route path="/contact" element={<Contact />} />
-      </Routes>
-
-    </Router>
+    <div className="app">
+      <UserProfileCard user={userData} />
+    </div>
   );
 }
 
